@@ -16,15 +16,6 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ja">
-      <head>
-        {process.env.NODE_ENV === "production" && (
-          <script
-            async
-            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8949303413724798"
-            crossOrigin="anonymous"
-          ></script>
-        )}
-      </head>
       <body className={cn(MPlus.className, "font-light")}>{children}</body>
     </html>
   );
