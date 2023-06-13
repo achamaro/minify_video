@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 
-import minify, { MinifyOptions } from "@/lib/minify";
+import minify, { Format, MinifyOptions } from "@/lib/minify";
 import { metadata } from "@/lib/video";
 
 import { useInput } from "../hooks/model";
@@ -13,11 +13,14 @@ export type MinifyProps = {
   resetFile: () => void;
 };
 
+const formats = ["webm", "gif", "mp4"] as const;
+
 export default function Minify({ file, resetFile }: MinifyProps) {
   const [bitrate] = useInput(200);
   const [fps] = useInput(20);
   const [width] = useInput(480);
   const [maxWidth, setMaxWidth] = useState(1920);
+  const [format, setFormat] = useState<Format>("webm");
   const [progress, setProgress] = useState(0);
   const [progressOpened, setProgressOpened] = useState(false);
 
@@ -33,6 +36,7 @@ export default function Minify({ file, resetFile }: MinifyProps) {
       bitrate: bitrate.value,
       fps: fps.value,
       width: width.value,
+      format,
       onProgress: ({ ratio }) => setProgress(ratio),
     };
 
@@ -56,9 +60,9 @@ export default function Minify({ file, resetFile }: MinifyProps) {
         <button onClick={resetFile}>reset</button>
       </div>
 
-      <dl className="mt-5 grid grid-cols-[auto,1fr] items-center gap-6 [&>dd]:flex [&>dd]:items-center [&>dd]:gap-3 [&>dt]:text-right">
+      <dl className="mt-5 grid grid-cols-[auto,1fr] items-center gap-6 [&>dt]:text-right">
         <dt>Bitrate (kbps)</dt>
-        <dd className="">
+        <dd className="flex items-center gap-3">
           <input type="range" step={10} min={100} max={4000} {...bitrate} />
           <input className="w-[4.5em]" type="text" {...bitrate} />
         </dd>
@@ -73,6 +77,25 @@ export default function Minify({ file, resetFile }: MinifyProps) {
         <dd className="flex items-center gap-3">
           <input type="range" step={1} min={10} max={maxWidth} {...width} />
           <input className="w-[4.5em]" type="text" {...width} />
+        </dd>
+
+        <dt>Format</dt>
+        <dd className="flex items-center gap-5">
+          {formats.map((f) => (
+            <label key={f} className="flex items-center gap-1">
+              <input
+                type="radio"
+                value={f}
+                checked={f === format}
+                onChange={({
+                  target: { value },
+                }: ChangeEvent<HTMLInputElement>) =>
+                  setFormat(value as (typeof formats)[number])
+                }
+              />
+              {f}
+            </label>
+          ))}
         </dd>
       </dl>
 
