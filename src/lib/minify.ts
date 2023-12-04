@@ -9,7 +9,6 @@ const types = {
 };
 
 export type MinifyOptions = {
-  bitrate: number;
   fps: number;
   width: number;
   format: Format;
@@ -18,15 +17,16 @@ export type MinifyOptions = {
 
 export default async function minify(
   file: File,
-  { bitrate, fps, width, format, onProgress }: MinifyOptions
+  { fps, width, format, onProgress }: MinifyOptions
 ) {
   const input = file.name;
   const output = file.name.replace(/\.[^\.]+$/, `.${format}`);
 
   const args = ["-i", input];
-  args.push("-b:v", `${bitrate}k`);
-  args.push("-r", `${fps}`);
-  args.push("-vf", `scale=${width}:-1`);
+  args.push(
+    "-filter_complex",
+    `[0:v] fps=${fps},scale=${width}:-1,split [a][b];[a] palettegen [p];[b][p] paletteuse=dither=none`
+  );
   args.push(output);
 
   const ffmpeg = createFFmpeg({

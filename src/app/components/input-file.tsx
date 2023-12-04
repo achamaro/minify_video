@@ -36,8 +36,8 @@ export function InputFile({ onInput, className }: InputFileProps) {
           </a>
           を使用してお使いのブラウザ上で動画のサイズを縮小するサービスです。
         </li>
-        <li>ファイルはどこにも送信されません。</li>
-        <li>動画はwebm形式で出力されます。</li>
+        <li>ブラウザ上で処理されるため、ファイルはどこにも送信されません。</li>
+        <li>動画はwebm/gif/mp4形式から選択できます。</li>
         <li>入力ファイルのサイズ上限は2GBです。</li>
       </ul>
     </section>

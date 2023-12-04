@@ -16,11 +16,10 @@ export type MinifyProps = {
 const formats = ["webm", "gif", "mp4"] as const;
 
 export default function Minify({ file, resetFile }: MinifyProps) {
-  const [bitrate] = useInput(200);
-  const [fps] = useInput(20);
-  const [width] = useInput(480);
+  const [fps] = useInput(10);
+  const [width] = useInput(640);
   const [maxWidth, setMaxWidth] = useState(1920);
-  const [format, setFormat] = useState<Format>("webm");
+  const [format, setFormat] = useState<Format>("gif");
   const [progress, setProgress] = useState(0);
   const [progressOpened, setProgressOpened] = useState(false);
 
@@ -33,7 +32,6 @@ export default function Minify({ file, resetFile }: MinifyProps) {
 
   async function handleStart() {
     const options: MinifyOptions = {
-      bitrate: bitrate.value,
       fps: fps.value,
       width: width.value,
       format,
@@ -61,12 +59,6 @@ export default function Minify({ file, resetFile }: MinifyProps) {
       </div>
 
       <dl className="mt-5 grid grid-cols-[auto,1fr] items-center gap-6 [&>dt]:text-right">
-        <dt>Bitrate (kbps)</dt>
-        <dd className="flex items-center gap-3">
-          <input type="range" step={10} min={100} max={4000} {...bitrate} />
-          <input className="w-[4.5em]" type="text" {...bitrate} />
-        </dd>
-
         <dt>FPS</dt>
         <dd className="flex items-center gap-3">
           <input type="range" step={1} min={10} max={240} {...fps} />
